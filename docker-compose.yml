@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  desktop:
+    restart: always
+    image: whatwewant/desktop:v1.0.2
+    ports:
+      - 0.0.0.0:${SERVICE_DESKTOP_SSH_PORT}:22
+      - 0.0.0.0:${SERVICE_DESKTOP_VNC_PORT}:5901
+    hostname: ${SERVICE_DESKTOP_COMPANY}
+    privileged: ${SERVICE_DESKTOP_PREVILEGED}
+    environment:
+      GIT_USER: ${SERVICE_DESKTOP_GIT_USER}
+      GIT_EMAIL: ${SERVICE_DESKTOP_GIT_EMAIL}
+      VNC_PASSWORD: ${SERVICE_DESKTOP_VNC_PASSWORD}
+    volumes:
+      - ${SERVICE_DATA}/.vscode-server:/home/workspace/.vscode-server
+      - ${SERVICE_DATA}/.ssh:/home/workspace/.ssh
+      - ${SERVICE_DESKTOP_SOURCE_CODE_DIR}:/home/workspace/code
+      # - ${SERVICE_DATA}/.vnc:/home/workspace/.vnc
+      # - ${SERVICE_DIR}/image/xstartup:/home/workspace/.vnc/xstartup
+
+networks:
+  default:
+    external: true
+    name: compose-ingress

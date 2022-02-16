@@ -1,0 +1,69 @@
+#!/bin/bash
+
+load inquirer
+
+check() {
+  if [ ! -f $SERVICE_CONFIG ]; then
+     touch $SERVICE_CONFIG
+  fi
+
+  config::load_file $SERVICE_CONFIG
+
+  if [ -z "$SERVICE_DESKTOP_COMPANY" ]; then
+    inquirer::text "请输入 SERVICE_DESKTOP_COMPANY:" value
+    echo "SERVICE_DESKTOP_COMPANY=$value" >> $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_DESKTOP_SOURCE_CODE_DIR" ]; then
+    inquirer::text "请输入 SERVICE_DESKTOP_SOURCE_CODE_DIR:" value
+    echo "SERVICE_DESKTOP_SOURCE_CODE_DIR=$value" >> $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_DESKTOP_GIT_USER" ]; then
+    inquirer::text "请输入 SERVICE_DESKTOP_GIT_USER:" value
+    echo "SERVICE_DESKTOP_GIT_USER=$value" >> $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_DESKTOP_GIT_EMAIL" ]; then
+    inquirer::text "请输入 SERVICE_DESKTOP_GIT_EMAIL:" value
+    echo "SERVICE_DESKTOP_GIT_EMAIL=$value" >> $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_DESKTOP_SSH_PORT" ]; then
+    inquirer::text "请输入 SERVICE_DESKTOP_SSH_PORT:" value
+    echo "SERVICE_DESKTOP_SSH_PORT=$value" >> $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_DESKTOP_VNC_PORT" ]; then
+    inquirer::text "请输入 SERVICE_DESKTOP_VNC_PORT:" value
+    echo "SERVICE_DESKTOP_VNC_PORT=$value" >> $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_DESKTOP_VNC_PASSWORD" ]; then
+    inquirer::text "请输入 SERVICE_DESKTOP_VNC_PASSWORD:" value
+    echo "SERVICE_DESKTOP_VNC_PASSWORD=$value" >> $SERVICE_CONFIG
+  fi
+
+  if [ "$SERVICE_DESKTOP_PREVILEGED" != "true" ]; then
+    local choices=(
+      "Yes"
+      "No"
+    )
+    inquirer::select "Allow root previledge ?" choices value
+    if [ "$value" = "Yes" ]; then
+      echo "SERVICE_DESKTOP_PREVILEGED=true" >> $SERVICE_CONFIG
+    fi
+  fi
+
+  #@TODO
+  export SERVICE_DESKTOP_COMPANY=$SERVICE_DESKTOP_COMPANY
+  export SERVICE_DESKTOP_SOURCE_CODE_DIR=$SERVICE_DESKTOP_SOURCE_CODE_DIR
+  export SERVICE_DESKTOP_GIT_USER=$SERVICE_DESKTOP_GIT_USER
+  export SERVICE_DESKTOP_GIT_EMAIL=$SERVICE_DESKTOP_GIT_EMAIL
+  export SERVICE_DESKTOP_SSH_PORT=$SERVICE_DESKTOP_SSH_PORT
+  export SERVICE_DESKTOP_PREVILEGED=$SERVICE_DESKTOP_PREVILEGED
+  export SERVICE_DESKTOP_VNC_PORT=$SERVICE_DESKTOP_VNC_PORT
+  export SERVICE_DESKTOP_VNC_PASSWORD=$SERVICE_DESKTOP_VNC_PASSWORD
+}
+
+check $@
