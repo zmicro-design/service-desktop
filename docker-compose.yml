@@ -3,7 +3,8 @@ version: '3.7'
 services:
   desktop:
     restart: always
-    image: whatwewant/desktop:v1.0.2
+    build:
+      context: ./image
     ports:
       - 0.0.0.0:${SERVICE_DESKTOP_SSH_PORT}:22
       - 0.0.0.0:${SERVICE_DESKTOP_VNC_PORT}:5901
